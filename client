@@ -9,8 +9,8 @@ function clear()
   term.setCursorPos(1, 1)
 end
 
-local serverID = false
-while serverID == false do
+local serverID = nil
+while not serverID do
   clear()
   print("[GatoNet] "..os.getComputerLabel().." ("..os.getComputerID()..")")
   print("Type a hostname:")
