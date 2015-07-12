@@ -1,4 +1,4 @@
-os.loadAPI(shell.resolve("GatoNet/api"))
+os.loadAPI("GatoNet/api")
 
 local modem = "left"
 local monitor = peripheral.wrap("back")
