@@ -1,0 +1,39 @@
+os.loadAPI("GatoNet/api")
+
+local modem = "back"
+
+api.init(modem)
+
+function clear()
+  term.clear()
+  term.setCursorPos(1, 1)
+end
+
+local serverID = false
+while serverID == false do
+  clear()
+  print("[GatoNet] "..os.getComputerLabel().." ("..os.getComputerID()..")")
+  print("Type a hostname:")
+  local serverHostname = read()
+  serverID = rednet.lookup("GatoNet", serverHostname)
+  if not serverID then
+    print("Error: Couldn't find host")
+    sleep(1)
+  end
+end
+
+clear()
+
+local quit = 0
+while quit == 0 do
+  local input = read()
+  if input == "quit" then
+    quit = 1
+  else
+    rednet.send(serverID, input, "GatoNet")
+  end
+end
+
+clear()
+
+rednet.close(modem)
