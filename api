@@ -1,0 +1,48 @@
+local path = "GatoNet"
+local repo = "https://raw.githubusercontent.com/danielesteban/GatoNet/master/"
+local hostname = os.getComputerLabel()
+
+function init(modem)
+  rednet.open(modem)
+  rednet.host("GatoNet", hostname)
+  print("[GatoNet] "..hostname.." ("..os.getComputerID()..")")
+end
+
+function parse(message)
+  local params = {}
+  local spat, epat, buf, quoted = [=[^(['"])]=], [=[(['"])$]=]
+  for str in message:gmatch("%S+") do
+    local squoted = str:match(spat)
+    local equoted = str:match(epat)
+    local escaped = str:match([=[(\*)['"]$]=])
+    if squoted and not quoted and not equoted then
+      buf, quoted = str, squoted
+    elseif buf and equoted == quoted and #escaped % 2 == 0 then
+      str, buf, quoted = buf .. ' ' .. str, nil, nil
+    elseif buf then
+      buf = buf .. ' ' .. str
+    end
+    if not buf then table.insert(params, (str:gsub(spat,""):gsub(epat,""))) end
+  end
+  return params
+end
+
+function update(program, startup)
+  local filename = path.."/"..program
+  if fs.exists(filename) then
+    fs.delete(filename)
+  end
+  local file = fs.open(filename, "w")
+  local request = http.get(repo..program)
+  file.write(request.readAll())
+  request.close()
+  file.close()
+
+  if startup then
+    if fs.exists("startup") then
+      fs.delete("startup")
+    end
+    fs.copy(filename, "startup")
+    os.reboot()
+  end
+end

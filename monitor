@@ -1,0 +1,69 @@
+os.loadAPI("GatoNet/api")
+
+local modem = "left"
+local monitor = peripheral.wrap("back")
+
+local mode = "banner"
+local banner = {"PIMP", "YO BASE", "MOTHERFUCKA"}
+local bannerY = 1
+local clockY = 3
+local textScale = 4
+
+local textColors = {colors.white, colors.blue, colors.purple, colors.magenta, colors.green, colors.red, colors.lime, colors.pink, colors.brown}
+local currentTextColor = 1
+
+local lastTick = os.clock()
+
+function nextTextColor()
+  currentTextColor = currentTextColor + 1
+  if currentTextColor > table.getn(textColors) then
+    currentTextColor = 1
+  end
+  return textColors[currentTextColor]
+end
+
+function line(y, color, text)
+  local width, height = monitor.getSize()
+  local offsetX = math.ceil(width / 2) - math.ceil(string.len(text) / 2) + 1
+  if offsetX < 1 then
+    offsetX = 1
+  end
+  monitor.setCursorPos(offsetX, y)
+  monitor.setTextColor(color)
+  monitor.write(text)
+end
+
+monitor.clear()
+monitor.setTextScale(textScale)
+
+api.init(modem)
+
+while true do
+  senderId, message = rednet.receive("GatoNet", 0)
+  if senderId and message then
+    local params = api.parse(message)
+    if table.getn(params) > 0 then
+      if params[1] == "update" then
+        api.update("monitor", true)
+      else
+        mode = params[1]
+      end
+    end
+  end
+
+  local delta = os.clock() - lastTick
+
+  if mode == "banner" and delta > 1 then
+    lastTick = os.clock()
+    monitor.clear()
+    for i=1, table.getn(banner) do
+      line(i + bannerY, nextTextColor(), banner[i])
+    end
+  end
+
+  if mode == "clock" and delta > 1 then
+    lastTick = os.clock()
+    monitor.clear()
+    line(clockY, nextTextColor(), textutils.formatTime(os.time(), false))
+  end
+end
