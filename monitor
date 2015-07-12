@@ -6,7 +6,7 @@ local monitor = peripheral.wrap("back")
 local mode = "banner"
 local banner = {"PIMP", "YO BASE", "MOTHERFUCKA"}
 local bannerY = 1
-local clockY = 3
+local clockY = 2
 local textScale = 4
 
 local textColors = {colors.white, colors.blue, colors.purple, colors.magenta, colors.green, colors.red, colors.lime, colors.pink, colors.brown}
@@ -67,6 +67,7 @@ while true do
   if mode == "clock" and delta > 1 then
     lastTick = os.clock()
     monitor.clear()
-    line(clockY, nextTextColor(), textutils.formatTime(os.time(), false))
+    line(clockY, nextTextColor(), os.day())
+    line(clockY + 1, nextTextColor(), textutils.formatTime(os.time(), false))
   end
 end
