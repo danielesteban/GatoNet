@@ -37,3 +37,4 @@ end
 clear()
 
 rednet.close(modem)
+os.shutdown()
