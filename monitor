@@ -6,9 +6,10 @@ local monitor = peripheral.wrap("back")
 local mode = "banner"
 local banner = {os.getComputerLabel(), "GatoNet ["..os.getComputerID().."]"}
 local bannerY = 1
+local bannerScale = 4
 local clockY = 2
+local clockScale = 5
 local textColors = {0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x200, 0x400, 0x800, 0x1000, 0x2000, 0x4000}
-local textScale = 4
 
 local lastTick = os.clock()
 
@@ -30,7 +31,6 @@ end
 math.randomseed(os.clock())
 
 monitor.clear()
-monitor.setTextScale(textScale)
 
 api.init(modem)
 
@@ -42,16 +42,20 @@ while true do
     if paramsCount > 0 then
       if params[1] == "update" then
         api.update("monitor", true)
-      elseif params[1] == "off" then
-        monitor.clear()
-        mode = "off"
       else
         mode = params[1]
-        if mode == "banner" and paramsCount > 1 then
-          banner = {}
-          for i=2, paramsCount do
-            table.insert(banner, params[i])
+        if mode == "banner" then
+          monitor.setTextScale(bannerScale)
+          if paramsCount > 1 then
+            banner = {}
+            for i=2, paramsCount do
+              table.insert(banner, params[i])
+            end
           end
+        elseif mode == "clock" then
+          monitor.setTextScale(clockScale)
+        else
+          monitor.clear()
         end
       end
     end
@@ -70,7 +74,6 @@ while true do
   if mode == "clock" and delta > 1 then
     lastTick = os.clock()
     monitor.clear()
-    line(clockY, randomColor(), "Day "..tostring(os.day()))
-    line(clockY + 1, randomColor(), textutils.formatTime(os.time(), false))
+    line(clockY, randomColor(), textutils.formatTime(os.time(), false))
   end
 end
