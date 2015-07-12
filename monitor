@@ -31,6 +31,8 @@ end
 math.randomseed(os.clock())
 
 monitor.clear()
+monitor.setBackgroundColor(0x8000)
+monitor.setScale(bannerScale)
 
 api.init(modem)
 
