@@ -1,4 +1,4 @@
-os.loadAPI("GatoNet/api")
+os.loadAPI(shell.resolve("GatoNet/api"))
 
 local modem = "back"
 
