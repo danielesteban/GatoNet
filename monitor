@@ -74,6 +74,7 @@ while true do
   if mode == "clock" and delta > 1 then
     lastTick = os.clock()
     monitor.clear()
-    line(clockY, randomColor(), textutils.formatTime(os.time(), false))
+    line(clockY, randomColor(), "Day "..tostring(os.day()))
+    line(clockY + 1, randomColor(), textutils.formatTime(os.time(), false))
   end
 end
