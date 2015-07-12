@@ -45,6 +45,9 @@ while true do
     if table.getn(params) > 0 then
       if params[1] == "update" then
         api.update("monitor", true)
+      elseif params[1] == "off" then
+        monitor.clear()
+        mode = "off"
       else
         mode = params[1]
       end
