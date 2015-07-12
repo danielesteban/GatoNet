@@ -4,7 +4,7 @@ local modem = "left"
 local monitor = peripheral.wrap("back")
 
 local mode = "banner"
-local banner = {"PIMP", "YO BASE", "MOTHERFUCKA"}
+local banner = {"PIMP", "YO BASE", "MOTHERFUCKAS"}
 local bannerY = 1
 local clockY = 2
 local textColors = {0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x200, 0x400, 0x800, 0x1000, 0x2000, 0x4000}
@@ -38,7 +38,8 @@ while true do
   senderId, message = rednet.receive("GatoNet", 0)
   if senderId and message then
     local params = api.parse(message)
-    if table.getn(params) > 0 then
+    local paramsCount = table.getn(params)
+    if paramsCount > 0 then
       if params[1] == "update" then
         api.update("monitor", true)
       elseif params[1] == "off" then
@@ -46,6 +47,12 @@ while true do
         mode = "off"
       else
         mode = params[1]
+        if mode == "banner" and paramsCount > 1 then
+          banner = {}
+          for i=2, paramsCount do
+            table.insert(banner, params[i])
+          end
+        end
       end
     end
   end
