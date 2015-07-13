@@ -25,12 +25,12 @@ function scan()
   panel("Scanning the network...")
     local time = 0
     local start = os.clock()
-    while(os.clock() - start < 3) {
+    while os.clock() - start < 3 do
       networkId, host = rednet.receive("GatoNet", 3)
       if networkId and host then
         table.insert(hosts, {networkId, host})
       end
-    }
+    end
     menu()
 end
 
