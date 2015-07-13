@@ -1,6 +1,6 @@
 os.loadAPI("GatoNet/api")
 
-local modem = "back"
+local modem = "right"
 local hostname = os.getComputerLabel()
 local status = "stopped"
 local lastBroadcast = os.clock()
