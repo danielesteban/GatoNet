@@ -100,7 +100,7 @@ function terminal(networkId)
     end
   end
 
-  scan()
+  menu()
 end
 
 scan()
