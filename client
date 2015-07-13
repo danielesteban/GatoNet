@@ -28,7 +28,7 @@ function scan()
   local start = os.clock()
   local hostCount = 0
   while os.clock() - start < 3 do
-    networkId, host = rednet.receive("GatoNet", 3)
+    networkId, host = rednet.receive("GatoNetBeacon", 3)
     if networkId and host then
       local already = false
       for i=1, hostCount do
