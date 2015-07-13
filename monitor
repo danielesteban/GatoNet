@@ -65,7 +65,7 @@ while true do
 
   local delta = os.clock() - lastTick
 
-  if mode == "banner" and delta > 1 then
+  if mode == "banner" and delta > 0.5 then
     lastTick = os.clock()
     monitor.clear()
     for i=1, table.getn(banner) do
@@ -73,7 +73,7 @@ while true do
     end
   end
 
-  if mode == "clock" and delta > 1 then
+  if mode == "clock" and delta > 0.5 then
     lastTick = os.clock()
     monitor.clear()
     line(clockY, randomColor(), "Day "..tostring(os.day()))
