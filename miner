@@ -18,7 +18,6 @@ local yDirection = "down"
 
 api.init(modem)
 api.refuel()
-print("Fuel: "..turtle.getFuelLevel().."/"..turtle.getFuelLimit())
 
 while true do
   networkId, message = rednet.receive("GatoNet", 0)
