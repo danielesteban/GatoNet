@@ -22,6 +22,7 @@ function panel(title)
 end
 
 function scan()
+  hosts = {}
   panel("Scanning the network...")
   local time = 0
   local start = os.clock()
