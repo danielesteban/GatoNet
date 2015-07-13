@@ -31,7 +31,7 @@ function scan()
     if networkId and host then
       local already = false
       for i=1, hostCount do
-        if hosts[i][1] === networkId then
+        if hosts[i][1] == networkId then
           already = true
         end
       end
