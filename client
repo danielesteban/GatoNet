@@ -2,6 +2,8 @@ os.loadAPI("GatoNet/api")
 
 local modem = "back"
 
+local hosts = {}
+
 api.init(modem)
 
 function clear()
@@ -9,32 +11,79 @@ function clear()
   term.setCursorPos(1, 1)
 end
 
-local serverID = nil
-while not serverID do
+function panel(title)
   clear()
   print("[GatoNet] "..os.getComputerLabel().." ("..os.getComputerID()..")")
-  print("Type a hostname:")
-  local serverHostname = read()
-  serverID = rednet.lookup("GatoNet", serverHostname)
-  if not serverID then
+    print("")
+  if title then
+    print(title)
+    print("")
+    end
+end
+
+function scan()
+  panel("Scanning the network...")
+    local time = 0
+    local start = os.clock()
+    while(os.clock() - start < 3) {
+      networkId, host = rednet.receive("GatoNet", 3)
+      if networkId and host then
+        table.insert(hosts, {networkId, host})
+      end
+    }
+    menu()
+end
+
+function menu()
+  panel()
+  local hostCount = table.getn(hosts)
+  for i=1, hostCount do
+    print("["..tostring(i).."] "..hosts[i][1].." ("..hosts[i][0]..")")
+  end
+  print("["..tostring(hostCount + 1).."] Re-scan network")
+  print("["..tostring(hostCount + 2).."] Type a hostname")
+  local input = tonumber(read())
+  if input < 1 or input > hostCount + 2 then
+    print("Error: Invalid option")
+      sleep(1)
+      menu()
+    else
+      if input == hostCount + 2 then
+        typeHost()
+      elseif input == hostCount + 1 then
+        scan()
+      else
+        terminal(hosts[input][0])
+      end
+  end
+
+end
+
+function typeHost()
+  panel("Type a hostname:")
+  local host = read()
+  local networkId = rednet.lookup("GatoNet", host)
+  if not networkId then
     print("Error: Couldn't find host")
     sleep(1)
+    menu()
   end
 end
 
-clear()
+function terminal(networkId)
+  clear()
 
-local quit = 0
-while quit == 0 do
-  local input = read()
-  if input == "quit" then
-    quit = 1
-  else
-    rednet.send(serverID, input, "GatoNet")
+  local quit = 0
+  while quit == 0 do
+    local input = read()
+    if input == "quit" then
+      quit = 1
+    else
+      rednet.send(networkId, input, "GatoNet")
+    end
   end
+
+  scan()
 end
 
-clear()
-
-rednet.close(modem)
-os.shutdown()
+scan()
