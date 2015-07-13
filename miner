@@ -62,6 +62,11 @@ while true do
   end
 
   if status == "running" then
+    if turtle.detect() then
+      turtle.dig()
+    end
+    turtle.forward()
+    
     for y=1, height do
       for x=1, cols do
         for z=1, rows - 1 do
