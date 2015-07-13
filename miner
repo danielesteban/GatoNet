@@ -39,6 +39,17 @@ while true do
         else
           yDirection = "down"
         end
+        print("Cols: "..tostring(cols).."Rows: "..tostring(rows).."Height: "..tostring(height))
+        if direction == "left" then
+          print("Start direction: Left")
+        else
+          print("Start direction: Right")
+        end
+        if yDirection == "down" then
+          print("Vertical direction: Down")
+        else
+          print("Vertical direction: Up")
+        end
         status = "configured"
       elseif params[1] == "start" then
         if status == "configured" then
@@ -53,7 +64,7 @@ while true do
   if status == "running" then
     for y=1, height do
       for x=1, cols do
-        for z=1, rows + 1 do
+        for z=1, rows do
           if turtle.detect() then
             turtle.dig()
           end
