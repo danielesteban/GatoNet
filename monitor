@@ -106,7 +106,7 @@ while true do
       line(cronoY, randomColor(), "00:00:00")
     else
       if cronoStatus == "running" then
-        cronoValue += 0.5
+        cronoValue = cronoValue + 0.5
       end
       local hours = tostring(math.floor(cronoValue / 3600))
       if string.len(hours) < 2 then
