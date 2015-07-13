@@ -65,16 +65,12 @@ while true do
           monitor.setTextScale(clockScale)
         elseif mode == "crono" then
           monitor.setTextScale(cronoScale)
-          if params[2] == "pause" then
+          if params[2] == "stop" then
             cronoStatus = "paused"
-          elseif params[2] == "resume" then
+          elseif params[2] == "start" then
             cronoStatus = "running"
-          else
-            if params[2] == "start" then
-              cronoStatus = "running"
-            else
-              cronoStatus = "stopped"
-            end
+          elseif params[2] == "reset" then
+            cronoStatus = "stopped"
             cronoValue = 0
           end
         else
