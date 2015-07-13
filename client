@@ -23,22 +23,32 @@ end
 
 function scan()
   panel("Scanning the network...")
-    local time = 0
-    local start = os.clock()
-    while os.clock() - start < 3 do
-      networkId, host = rednet.receive("GatoNet", 3)
-      if networkId and host then
+  local time = 0
+  local start = os.clock()
+  local hostCount = 0
+  while os.clock() - start < 3 do
+    networkId, host = rednet.receive("GatoNet", 3)
+    if networkId and host then
+      local already = false
+      for i=1, hostCount do
+        if hosts[i][1] === networkId then
+          already = true
+        end
+      end
+      if not already then
         table.insert(hosts, {networkId, host})
+        hostCount++
       end
     end
-    menu()
+  end
+  menu()
 end
 
 function menu()
   panel()
   local hostCount = table.getn(hosts)
   for i=1, hostCount do
-    print("["..tostring(i).."] "..hosts[i][1].." ("..hosts[i][0]..")")
+    print("["..tostring(i).."] "..hosts[i][2].." ("..hosts[i][1]..")")
   end
   print("["..tostring(hostCount + 1).."] Re-scan network")
   print("["..tostring(hostCount + 2).."] Type a hostname")
@@ -53,7 +63,7 @@ function menu()
       elseif input == hostCount + 1 then
         scan()
       else
-        terminal(hosts[input][0])
+        terminal(hosts[input][1])
       end
   end
 

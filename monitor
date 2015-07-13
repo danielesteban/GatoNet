@@ -126,7 +126,7 @@ while true do
     end
   end
 
-  if os.clock() - lastBroadcast > 3000 then
+  if os.clock() - lastBroadcast > 3 then
     lastBroadcast = os.clock()
     rednet.broadcast(hostname, "GatoNet")
   end
