@@ -8,7 +8,7 @@ local lastBroadcast = os.clock()
 local rows = 0
 local cols = 0
 local height = 0
-local direction = "right"
+local direction = "left"
 local yDirection = "down"
 
 api.init(modem)
@@ -32,8 +32,14 @@ while true do
         if params[5] then
           direction = params[5]
         else
-          direction = "right"
+          direction = "left"
         end
+        if params[6] then
+          yDirection = params[6]
+        else
+          yDirection = "down"
+        end
+        status = "configured"
       elseif params[1] == "start" then
         if status == "configured" then
           status = "running"
