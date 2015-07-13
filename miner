@@ -22,7 +22,7 @@ while true do
     local paramsCount = table.getn(params)
     if paramsCount > 0 then
       if params[1] == "update" then
-        api.update("turtle", true)
+        api.update("miner", true)
       elseif params[1] == "refuel" then
         api.refuel()
       elseif params[1] == "config" then
