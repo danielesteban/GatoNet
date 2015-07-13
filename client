@@ -37,7 +37,7 @@ function scan()
       end
       if not already then
         table.insert(hosts, {networkId, host})
-        hostCount++
+        hostCount = hostCount + 1
       end
     end
   end
