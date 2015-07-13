@@ -44,7 +44,7 @@ monitor.setTextScale(bannerScale)
 api.init(modem)
 
 while true do
-  networkId, message = rednet.receive("GatoNet", hostname)
+  networkId, message = rednet.receive("GatoNet", 0)
   if networkId and message then
     local params = api.parse(message)
     local paramsCount = table.getn(params)
@@ -128,6 +128,6 @@ while true do
 
   if os.clock() - lastBroadcast > 3000 then
     lastBroadcast = os.clock()
-    rednet.broadcast(nil, "GatoNet")
+    rednet.broadcast(hostname, "GatoNet")
   end
 end
