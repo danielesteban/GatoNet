@@ -74,7 +74,9 @@ function typeHost()
   panel("Type a hostname:")
   local host = read()
   local networkId = rednet.lookup("GatoNet", host)
-  if not networkId then
+  if networkId then
+    terminal(networkId)
+  else
     print("Error: Couldn't find host")
     sleep(1)
     menu()
