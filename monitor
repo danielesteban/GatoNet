@@ -76,9 +76,9 @@ while true do
             end
           elseif mode == "clock" then
             monitor.setTextScale(clockScale)
+          else
+            monitor.clear()
           end
-        else
-          monitor.clear()
         end
       end
     end
