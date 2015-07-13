@@ -10,7 +10,7 @@ local bannerScale = 4
 local clockY = 2
 local clockScale = 5
 local cronoY = 3
-local cronoScale = 5
+local cronoScale = 4
 local textColors = {0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x200, 0x400, 0x800, 0x1000, 0x2000, 0x4000}
 
 local lastTick = os.clock()
@@ -116,7 +116,7 @@ while true do
       if string.len(minutes) < 2 then
         minutes = "0"..minutes
       end
-      local seconds = tostring(cronoValue % 60)
+      local seconds = tostring(math.floor(cronoValue % 60))
       if string.len(seconds) < 2 then
         seconds = "0"..seconds
       end
