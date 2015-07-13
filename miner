@@ -64,37 +64,36 @@ while true do
   if status == "running" then
     for y=1, height do
       for x=1, cols do
-        for z=1, rows do
+        for z=1, rows - 1 do
           if turtle.detect() then
             turtle.dig()
           end
           turtle.forward()
         end
 
-        if direction == "left" then
+        if x == cols then
+          turtle.turnLeft()
           turtle.turnLeft()
         else
-          turtle.turnRight()
+          if direction == "left" then
+            turtle.turnLeft()
+          else
+            turtle.turnRight()
+          end
+          
+          if turtle.detect() then
+            turtle.dig()
+          end
+          
+          turtle.forward()
+          if direction == "left" then
+            turtle.turnLeft()
+            direction = "right"
+          else
+            turtle.turnRight()
+            direction = "left"
+          end
         end
-        
-        if turtle.detect() then
-          turtle.dig()
-        end
-        
-        turtle.forward()
-        if direction == "left" then
-          turtle.turnLeft()
-          direction = "right"
-        else
-          turtle.turnRight()
-          direction = "left"
-        end
-      end
-      
-      if direction == "left" then
-        turtle.right()
-      else
-        turtle.left()
       end
 
       if yDirection == "down" then
@@ -109,6 +108,7 @@ while true do
         turtle.up()
       end
     end
+    status = "configured"
   end
 
   if os.clock() - lastBroadcast > 3 then
