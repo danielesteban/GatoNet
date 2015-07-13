@@ -8,6 +8,18 @@ function init(modem)
   print("[GatoNet] "..hostname.." ("..os.getComputerID()..")")
 end
 
+function refuel()
+  if turtle.getFuelLevel() < turtle.getFuelLimit() then
+    for i = 1, 16 do
+      turtle.select(i)
+      if turtle.refuel(0) then
+        turtle.refuel(turtle.getItemCount(i))
+      end
+    end
+    turtle.select(1)
+  end
+end
+
 function parse(message)
   local params = {}
   local spat, epat, buf, quoted = [=[^(['"])]=], [=[(['"])$]=]

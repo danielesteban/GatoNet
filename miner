@@ -1,0 +1,101 @@
+os.loadAPI("GatoNet/api")
+
+local modem = "back"
+local hostname = os.getComputerLabel()
+local status = "stopped"
+local lastBroadcast = os.clock()
+
+local rows = 0
+local cols = 0
+local height = 0
+local direction = "right"
+local yDirection = "down"
+
+api.init(modem)
+api.refuel()
+print("Fuel: "..turtle.getFuelLevel().."/"..turtle.getFuelLimit())
+
+while true do
+  networkId, message = rednet.receive("GatoNet", 0)
+  if networkId and message then
+    local params = api.parse(message)
+    local paramsCount = table.getn(params)
+    if paramsCount > 0 then
+      if params[1] == "update" then
+        api.update("turtle", true)
+      elseif params[1] == "refuel" then
+        api.refuel()
+      elseif params[1] == "config" then
+        cols = tonumber(params[2] or 0)
+        rows = tonumber(params[3] or 0)
+        height = tonumber(params[4] or 0)
+        if params[5] then
+          direction = params[5]
+        else
+          direction = "right"
+        end
+      elseif params[1] == "start" then
+        if status == "configured" then
+          status = "running"
+        end
+      elseif params[1] == "stop" then
+        status = "stopped"
+      end
+    end
+  end
+
+  if status == "running" then
+    for y=1, height do
+      for x=1, cols do
+        for z=1, rows + 1 do
+          if turtle.detect() then
+            turtle.dig()
+          end
+          turtle.forward()
+        end
+
+        if direction == "left" then
+          turtle.turnLeft()
+        else
+          turtle.turnRight()
+        end
+        
+        if turtle.detect() then
+          turtle.dig()
+        end
+        
+        turtle.forward()
+        if direction == "left" then
+          turtle.turnLeft()
+          direction = "right"
+        else
+          turtle.turnRight()
+          direction = "left"
+        end
+      end
+      
+      if direction == "left" then
+        turtle.right()
+      else
+        turtle.left()
+      end
+
+      if yDirection == "down" then
+        if turtle.detectDown() then
+          turtle.digDown()
+        end
+        turtle.down()
+      else
+        if turtle.detectUp() then
+          turtle.digUp()
+        end
+        turtle.up()
+      end
+    end
+  end
+
+  if os.clock() - lastBroadcast > 3 then
+    lastBroadcast = os.clock()
+    rednet.broadcast(hostname, "GatoNet")
+  end
+end
