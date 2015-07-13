@@ -9,9 +9,14 @@ local bannerY = 1
 local bannerScale = 4
 local clockY = 2
 local clockScale = 5
+local cronoY = 3
+local cronoScale = 5
 local textColors = {0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x200, 0x400, 0x800, 0x1000, 0x2000, 0x4000}
 
 local lastTick = os.clock()
+
+local cronoStatus = "stopped"
+local cronoValue = 0
 
 function randomColor()
   return textColors[math.random(table.getn(textColors))]
@@ -56,6 +61,20 @@ while true do
           end
         elseif mode == "clock" then
           monitor.setTextScale(clockScale)
+        elseif mode == "crono" then
+          monitor.setTextScale(cronoScale)
+          if params[2] == "pause" then
+            cronoStatus = "paused"
+          elseif params[2] == "resume" then
+            cronoStatus = "running"
+          else
+            if params[2] == "start" then
+              cronoStatus = "running"
+            else
+              cronoStatus = "stopped"
+            end
+            cronoValue = 0
+          end
         else
           monitor.clear()
         end
@@ -73,10 +92,35 @@ while true do
     end
   end
 
-  if mode == "clock" and delta > 0.5 then
+  if mode == "clock" and delta >= 0.5 then
     lastTick = os.clock()
     monitor.clear()
     line(clockY, randomColor(), "Day "..tostring(os.day()))
     line(clockY + 1, randomColor(), textutils.formatTime(os.time(), false))
+  end
+
+  if mode == "crono" and delta >= 0.5 then
+    lastTick = os.clock()
+    monitor.clear()
+    if cronoStatus == "stopped" then
+      line(cronoY, randomColor(), "00:00:00")
+    else
+      if cronoStatus == "running" then
+        cronoValue += 0.5
+      end
+      local hours = tostring(math.floor(cronoValue / 3600))
+      if string.len(hours) < 2 then
+        hours = "0" + hours
+      end
+      local minutes = tostring(math.floor(cronoValue / 60))
+      if string.len(minutes) < 2 then
+        minutes = "0" + minutes
+      end
+      local seconds = tostring(cronoValue % 60)
+      if string.len(seconds) < 2 then
+        seconds = "0" + seconds
+      end
+      line(cronoY, randomColor(), hours..":"..minutes..":"..seconds)
+    end
   end
 end
