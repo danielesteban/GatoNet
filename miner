@@ -66,7 +66,7 @@ while true do
   end
 
   if status == "running" then
-    if turtle.detect() then
+    while turtle.detect() then
       turtle.dig()
     end
     turtle.forward()
@@ -74,7 +74,7 @@ while true do
     for y=1, height do
       for x=1, cols do
         for z=1, rows - 1 do
-          if turtle.detect() then
+          while turtle.detect() then
             turtle.dig()
           end
           turtle.forward()
@@ -90,7 +90,7 @@ while true do
             turtle.turnRight()
           end
           
-          if turtle.detect() then
+          while turtle.detect() then
             turtle.dig()
           end
           
@@ -109,12 +109,12 @@ while true do
         status = "configured"
       else
         if yDirection == "down" then
-          if turtle.detectDown() then
+          while turtle.detectDown() then
             turtle.digDown()
           end
           turtle.down()
         else
-          if turtle.detectUp() then
+          while turtle.detectUp() then
             turtle.digUp()
           end
           turtle.up()
