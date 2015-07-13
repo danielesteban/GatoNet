@@ -1,4 +1,9 @@
-os.loadAPI("GatoNet/api")
+if fs.exists("GatoNet") then
+  os.loadAPI("GatoNet/api")
+else
+  os.loadAPI("disk/GatoNet/api")
+end
+
 
 local modem = "right"
 local hostname = os.getComputerLabel()
